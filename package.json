@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "process": "ts-node classExample/index.ts"
+    "process": "ts-node src/index.ts"
   },
   "author": "",
   "license": "ISC",
