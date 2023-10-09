@@ -26,9 +26,12 @@ export class ItemRepository implements IItemRepository {
     return this._getDependencies(id);
   }
 
-  private _getDependencies(id: string, isRoot = true) {
+  private _getDependencies(
+    id: string,
+    isRoot = true,
+    processed: Set<string> = new Set()
+  ) {
     const item = this.getOrThrow(id);
-
     const dependencies: Array<Item> = [];
 
     if (isRoot === false) {
@@ -36,7 +39,13 @@ export class ItemRepository implements IItemRepository {
     }
 
     for (const dependency of item.dependencies) {
-      dependencies.push(...this._getDependencies(dependency, false));
+      // Avoids infinite recursion if there are circular dependencies
+      if (processed.has(dependency) === false) {
+        processed.add(dependency);
+        dependencies.push(
+          ...this._getDependencies(dependency, false, processed)
+        );
+      }
     }
 
     return dependencies;
