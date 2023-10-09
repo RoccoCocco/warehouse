@@ -1,10 +1,6 @@
 import { Item } from "@/models";
 
-import {
-  IStrategy,
-  IWarehouse,
-  IItemRepository,
-} from "@/interfaces";
+import { IStrategy, IWarehouse, IItemRepository } from "@/interfaces";
 import { ItemListHelper } from "@/helpers";
 
 export class BruteforceSortStrategy implements IStrategy {
@@ -14,6 +10,23 @@ export class BruteforceSortStrategy implements IStrategy {
   ) {}
 
   assort(items: Array<Item>): Array<Item> | Iterable<Item> {
+    const itemsWithDependencies = ItemListHelper.removeDuplicates(
+      ...items.map((item) => this._getDependencies(item)).flat()
+    );
+
+    const itemsWithDependenciesSize = ItemListHelper.sumSize(
+      itemsWithDependencies
+    );
+
+    if (itemsWithDependenciesSize <= this._warehouse.freeSpace) {
+      console.debug("🔔 All can fit, returning whole order");
+      return items;
+    }
+
+    return this._findMostValuableList(items);
+  }
+
+  private _findMostValuableList(items: Array<Item>) {
     const selection: Array<Array<Item>> = [];
 
     for (const item of items) {
