@@ -1,12 +1,15 @@
 import { Item } from "@/models";
 
-import { IStrategy } from "@/interfaces";
+import { IStrategy, IWarehouse } from "@/interfaces";
 
 /**
  * Splits items into sorted priority groups and applies secondary strategy on each.
  */
 export class PriorityGroupStrategy implements IStrategy {
-  constructor(private readonly _secondaryStrategy: IStrategy) {}
+  constructor(
+    private readonly _warehouse: IWarehouse,
+    private readonly _secondaryStrategy: IStrategy
+  ) {}
 
   *assort(items: Array<Item>): Iterable<Item> {
     const priorityLists = this._getPrioritizedItemLists(items);
@@ -27,7 +30,9 @@ export class PriorityGroupStrategy implements IStrategy {
 
     for (const priority of sortedPriorities) {
       console.debug(`🚩 Handing over priority [${priority}]`);
-      yield items.filter((item) => item.priority === priority);
+      yield items
+        .filter((item) => item.priority === priority)
+        .filter((item) => this._warehouse.has(item.name) === false);
     }
   }
 }

@@ -11,9 +11,8 @@ const itemRepository = new ItemRepository(items);
   const warehouse = new Warehouse(TOTAL_SPACE, itemRepository);
   const manager = new WarehouseOrderManager(warehouse, itemRepository);
 
-  const strategy = new PriorityGroupStrategy(
-    new BruteforceSortStrategy(warehouse, itemRepository)
-  );
+  const subStrategy = new BruteforceSortStrategy(warehouse, itemRepository);
+  const strategy = new PriorityGroupStrategy(warehouse, subStrategy);
 
   const orderList = new Set<string>(items.map(({ name }) => name));
 
