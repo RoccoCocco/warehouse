@@ -3,7 +3,7 @@ import { items, TOTAL_SPACE } from "@/data";
 import { ItemRepository } from "@/repositories";
 import { Warehouse } from "@/warehouse";
 import { WarehouseOrderManager } from "@/warehouseOrderManager";
-import { PriorityGroupStrategy, BruteforceSortStrategy } from "@/strategies";
+import { PriorityGroupStrategy, MostValuableSetStrategy } from "@/strategies";
 
 const itemRepository = new ItemRepository(items);
 
@@ -11,7 +11,7 @@ const itemRepository = new ItemRepository(items);
   const warehouse = new Warehouse(TOTAL_SPACE, itemRepository);
   const manager = new WarehouseOrderManager(warehouse, itemRepository);
 
-  const subStrategy = new BruteforceSortStrategy(warehouse, itemRepository);
+  const subStrategy = new MostValuableSetStrategy(warehouse, itemRepository);
   const strategy = new PriorityGroupStrategy(warehouse, subStrategy);
 
   const orderList = new Set<string>(items.map(({ name }) => name));

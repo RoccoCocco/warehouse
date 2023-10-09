@@ -3,7 +3,7 @@ import { Item } from "@/models";
 import { IStrategy, IWarehouse, IItemRepository } from "@/interfaces";
 import { ItemListHelper } from "@/helpers";
 
-export class BruteforceSortStrategy implements IStrategy {
+export class MostValuableSetStrategy implements IStrategy {
   constructor(
     private readonly _warehouse: IWarehouse,
     private readonly _itemRepository: IItemRepository

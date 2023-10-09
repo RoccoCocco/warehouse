@@ -1,2 +1,2 @@
-export { BruteforceSortStrategy } from "./bruteforceSortStrategy";
-export { PriorityGroupStrategy } from "./priorityGroupStrategy";
+export * from "./mostValuableSetStrategy";
+export * from "./priorityGroupStrategy";
